@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "Random.h"
 #include <algorithm>
 
 Grid::Grid(const int cols, const int rows)
@@ -9,16 +10,34 @@ Grid::Grid(const int cols, const int rows)
 
 void Grid::update()
 {
-	for (int i = _cells.size() - 2; i >= 0; i--)
+	for (int row = static_cast<int>(_cells.size()) - 2; row >= 0; --row)
 	{
-		for (int j = 0; j < _cells[i].size(); j++)
-		{
-			Grain& current = _cells[i][j];
+		auto& currentRow = _cells[row];
+		auto& nextRow = _cells[row + 1];
 
-			if (_cells[i + 1][j].getType() == Grain::Type::AIR)
+		for (int col = 0; col < static_cast<int>(currentRow.size()); ++col)
+		{
+			auto& current = currentRow[col];
+
+			if (isEmpty(row + 1, col))
 			{
-				std::swap(current, _cells[i + 1][j]);
+				std::swap(current, nextRow[col]);
+				continue;
 			}
+
+			const bool leftEmpty = isEmpty(row + 1, col - 1);
+			const bool rightEmpty = isEmpty(row + 1, col + 1);
+
+			if (leftEmpty && !rightEmpty)
+				std::swap(current, nextRow[col - 1]);
+			else if (!leftEmpty && rightEmpty)
+				std::swap(current, nextRow[col + 1]);
+			else if (leftEmpty && rightEmpty)
+			{
+				int direction = Random::randomItem(std::array{ -1, 1 });
+				std::swap(current, nextRow[col + direction]);
+			}
+			// else: no move possible, stay put
 		}
 	}
 }
@@ -36,4 +55,13 @@ void Grid::setCell(const Grain::Type& type, const int col, const int row)
 		_cells[row][col].getType() != Grain::Type::AIR) return;
 
 	_cells[row][col].setType(type);
+}
+
+bool Grid::isEmpty(const int row, const int col) const
+{
+	if (row < 0 || col < 0 ||
+		row >= _cells.size() || col >= _cells[0].size())
+		return false;
+
+	return _cells[row][col].getType() == Grain::Type::AIR;
 }

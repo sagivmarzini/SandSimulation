@@ -14,5 +14,7 @@ public:
 	void setCell(const Grain::Type& type, const int col, const int row);
 
 private:
+	bool isEmpty(const int row, const int col) const;
+
 	std::vector<std::vector<Grain>> _cells;
 };
