@@ -3,7 +3,8 @@
 Renderer::Renderer(const sf::VideoMode& videoMode, const std::string& windowName, const int maxFrameRate, Grid& grid)
 	: _window(videoMode, windowName),
 	_grid(grid),
-	_sideLength((float)std::min(_window.getSize().y / grid.getCells().size(), _window.getSize().x / grid.getCells()[0].size()))
+	_sideLength((float)std::min(_window.getSize().y / grid.getCells().size(), _window.getSize().x / grid.getCells()[0].size())),
+	_brushSize(1)
 {
 	//_window.setFramerateLimit(maxFrameRate);
 }
@@ -12,28 +13,8 @@ void Renderer::draw()
 {
 	_window.clear(sf::Color::Black);
 
-	sf::VertexArray vertices(sf::PrimitiveType::Triangles);
-	const auto& cells = _grid.getCells();
-
-	for (int row = 0; row < cells.size(); ++row) {
-		for (int col = 0; col < cells[row].size(); ++col) {
-			if (cells[row][col].getType() == Grain::Type::AIR)
-				continue; // skip empty cells
-
-			float x = col * _sideLength;
-			float y = row * _sideLength;
-
-			vertices.append(sf::Vertex{ { x, y }, sf::Color::White });
-			vertices.append(sf::Vertex{ { x + _sideLength, y }, sf::Color::White });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::White });
-
-			vertices.append(sf::Vertex{ { x, y }, sf::Color::White });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::White });
-			vertices.append(sf::Vertex{ { x, y + _sideLength }, sf::Color::White });
-		}
-	}
-
-	_window.draw(vertices);
+	drawSand();
+	drawBrush();
 
 	_window.display();
 }
@@ -46,11 +27,15 @@ void Renderer::processEvents()
 	{
 		if (event->is<sf::Event::Closed>())
 			_window.close();
-
 		else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 		{
 			if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
 				_window.close();
+		}
+		else if (const auto* mouseEvent = event->getIf<sf::Event::MouseWheelScrolled>())
+		{
+			if (mouseEvent->delta > 0) _brushSize++;
+			if (mouseEvent->delta < 0 && _brushSize > 1) _brushSize--;
 		}
 	}
 
@@ -61,11 +46,68 @@ void Renderer::processEvents()
 		int col = mousePos.x / _sideLength;
 		int row = mousePos.y / _sideLength;
 
-		_grid.setCell(Grain::Type::SAND, col, row);
+		useBrush(col, row);
 	}
 }
 
 bool Renderer::isOpen() const
 {
 	return _window.isOpen();
+}
+
+void Renderer::drawSand()
+{
+	sf::VertexArray vertices(sf::PrimitiveType::Triangles);
+	const auto& cells = _grid.getCells();
+
+	for (int row = 0; row < cells.size(); ++row) {
+		for (int col = 0; col < cells[row].size(); ++col) {
+			if (cells[row][col].getType() == Grain::Type::AIR)
+				continue; // skip empty cells
+
+			float x = col * _sideLength;
+			float y = row * _sideLength;
+
+			vertices.append(sf::Vertex{ { x, y }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x + _sideLength, y }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::Red });
+
+			vertices.append(sf::Vertex{ { x, y }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x, y + _sideLength }, sf::Color::Red });
+		}
+	}
+
+	_window.draw(vertices);
+}
+
+void Renderer::drawBrush()
+{
+	const auto mousePosition = sf::Mouse::getPosition(_window);
+	const auto brushSize = _brushSize * _sideLength;
+
+	auto brushCursor = sf::CircleShape(brushSize);
+	brushCursor.setOrigin({ (float)brushSize,(float)brushSize });
+	brushCursor.setPosition({ (float)mousePosition.x, (float)mousePosition.y });
+	brushCursor.setOutlineThickness(2);
+	brushCursor.setFillColor(sf::Color(255, 255, 255, 100));
+
+	_window.draw(brushCursor);
+}
+
+void Renderer::useBrush(const int col, const int row)
+{
+	const int radius = _brushSize / 2;
+
+	for (int x = -radius; x <= radius; x++)
+	{
+		for (int y = -radius; y <= radius; y++)
+		{
+			// Make it circular instead of square
+			if (x * x + y * y <= radius * radius)
+			{
+				_grid.setCell(Grain::Type::SAND, col + x, row + y);
+			}
+		}
+	}
 }

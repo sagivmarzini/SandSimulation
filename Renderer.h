@@ -14,7 +14,13 @@ public:
 
 	bool isOpen() const;
 private:
+	void drawSand();
+	void drawBrush();
+
+	void useBrush(const int col, const int row);
+
 	sf::RenderWindow _window;
 	Grid& _grid;
 	float _sideLength;
+	int _brushSize;
 };
