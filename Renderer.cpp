@@ -12,27 +12,24 @@ void Renderer::draw()
 {
 	_window.clear(sf::Color::Black);
 
-	sf::VertexArray vertices(sf::PrimitiveType::TriangleStrip, 4);
+	sf::VertexArray vertices(sf::PrimitiveType::Triangles);
 	const auto& cells = _grid.getCells();
 
 	for (int row = 0; row < cells.size(); ++row) {
 		for (int col = 0; col < cells[row].size(); ++col) {
-			if (cells[row][col].getType() != Grain::Type::SAND)
+			if (cells[row][col].getType() == Grain::Type::AIR)
 				continue; // skip empty cells
 
 			float x = col * _sideLength;
 			float y = row * _sideLength;
 
-			// Add 4 vertices per quad
-			vertices.append(sf::Vertex({ x, y }, sf::Color::White));
-			vertices.append(sf::Vertex({ x + _sideLength, y }, sf::Color::White));
-			vertices.append(sf::Vertex({ x + _sideLength, y + _sideLength }, sf::Color::White));
-			vertices.append(sf::Vertex({ x, y + _sideLength }, sf::Color::White));
+			vertices.append(sf::Vertex{ { x, y }, sf::Color::White });
+			vertices.append(sf::Vertex{ { x + _sideLength, y }, sf::Color::White });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::White });
 
-			vertices[0].texCoords = sf::Vector2f(0.f, 0.f);
-			vertices[1].texCoords = sf::Vector2f(0.f, _sideLength);
-			vertices[2].texCoords = sf::Vector2f(_sideLength, 0.f);
-			vertices[3].texCoords = sf::Vector2f(_sideLength, _sideLength);
+			vertices.append(sf::Vertex{ { x, y }, sf::Color::White });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::White });
+			vertices.append(sf::Vertex{ { x, y + _sideLength }, sf::Color::White });
 		}
 	}
 
@@ -45,11 +42,19 @@ void Renderer::processEvents()
 {
 	const std::optional event = _window.pollEvent();
 
-	if (!event.has_value()) return;
+	if (event.has_value())
+	{
+		if (event->is<sf::Event::Closed>())
+			_window.close();
 
-	if (event->is<sf::Event::Closed>())
-		_window.close();
-	else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+		{
+			if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+				_window.close();
+		}
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
 		sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
 

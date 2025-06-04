@@ -2,8 +2,8 @@
 #include "Grid.h"
 #include "Renderer.h"
 
-constexpr double DELTA_TIME = 30.0f;
-constexpr sf::Time LOGIC_DT = sf::seconds(1.f / DELTA_TIME);;
+constexpr double FRAME_RATE = 60.0f;
+constexpr sf::Time deltaTime = sf::seconds(1.f / FRAME_RATE);;
 
 int main()
 {
@@ -15,17 +15,17 @@ int main()
 
 	while (renderer.isOpen())
 	{
+		renderer.processEvents();
+
 		sf::Time frameTime = clock.restart();
 		accumulator += frameTime;
 
-		while (accumulator >= LOGIC_DT)
+		while (accumulator >= deltaTime)
 		{
 			grid.update();
 
-			accumulator -= LOGIC_DT;
+			accumulator -= deltaTime;
 		}
-
-		renderer.processEvents();
 
 		renderer.draw();
 	}

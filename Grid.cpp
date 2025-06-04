@@ -30,7 +30,8 @@ const std::vector<std::vector<Grain>>& Grid::getCells() const
 
 void Grid::setCell(const Grain::Type& type, const int col, const int row)
 {
-	if (_cells.empty() || row < 0 || row >= _cells.size() ||
+	if (_cells.empty() ||
+		row < 0 || row >= _cells.size() ||
 		col < 0 || col >= _cells[0].size() ||
 		_cells[row][col].getType() != Grain::Type::AIR) return;
 
