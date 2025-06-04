@@ -17,7 +17,7 @@ private:
 	void drawSand();
 	void drawBrush();
 
-	void useBrush(const int col, const int row);
+	void useBrush(const int col, const int row, const Grain::Type grainType);
 
 	sf::RenderWindow _window;
 	Grid& _grid;

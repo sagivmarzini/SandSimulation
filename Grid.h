@@ -14,7 +14,11 @@ public:
 	void setCell(const Grain::Type& type, const int col, const int row);
 
 private:
-	bool isEmpty(const int row, const int col) const;
+	bool isAir(const int row, const int col) const;
+	bool isAirOrWater(const int row, const int col) const;
+
+	void updateSand(const int row, const int col);
+	void updateWater(const int row, const int col);
 
 	std::vector<std::vector<Grain>> _cells;
 };

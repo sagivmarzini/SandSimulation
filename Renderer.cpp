@@ -4,7 +4,7 @@ Renderer::Renderer(const sf::VideoMode& videoMode, const std::string& windowName
 	: _window(videoMode, windowName),
 	_grid(grid),
 	_sideLength((float)std::min(_window.getSize().y / grid.getCells().size(), _window.getSize().x / grid.getCells()[0].size())),
-	_brushSize(1)
+	_brushSize(_window.getSize().x / 100 / _sideLength)
 {
 	//_window.setFramerateLimit(maxFrameRate);
 }
@@ -46,7 +46,16 @@ void Renderer::processEvents()
 		int col = mousePos.x / _sideLength;
 		int row = mousePos.y / _sideLength;
 
-		useBrush(col, row);
+		useBrush(col, row, Grain::Type::Sand);
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+	{
+		sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
+
+		int col = mousePos.x / _sideLength;
+		int row = mousePos.y / _sideLength;
+
+		useBrush(col, row, Grain::Type::Water);
 	}
 }
 
@@ -63,7 +72,7 @@ void Renderer::drawSand()
 	for (int row = 0; row < cells.size(); ++row) {
 		for (int col = 0; col < cells[row].size(); ++col) {
 			const auto& cell = cells[row][col];
-			if (cell.getType() == Grain::Type::AIR)
+			if (cell.getType() == Grain::Type::Air)
 				continue; // skip empty cells
 
 			float x = col * _sideLength;
@@ -96,7 +105,7 @@ void Renderer::drawBrush()
 	_window.draw(brushCursor);
 }
 
-void Renderer::useBrush(const int col, const int row)
+void Renderer::useBrush(const int col, const int row, const Grain::Type grainType)
 {
 	const int radius = _brushSize / 2;
 
@@ -107,7 +116,7 @@ void Renderer::useBrush(const int col, const int row)
 			// Make it circular instead of square
 			if (x * x + y * y <= radius * radius)
 			{
-				_grid.setCell(Grain::Type::SAND, col + x, row + y);
+				_grid.setCell(grainType, col + x, row + y);
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 #include "Random.h"
 
 Grain::Grain()
-	: _type(Type::AIR)
+	: _type(Type::Air)
 {
 }
 
@@ -24,13 +24,18 @@ sf::Color Grain::getColor() const
 
 void Grain::assignColor()
 {
+	using enum Grain::Type;
+
 	switch (_type)
 	{
-	case Grain::Type::AIR:
+	case Air:
 		_color = sf::Color::Transparent;
 		break;
-	case Grain::Type::SAND:
+	case Sand:
 		_color = sf::Color(Random::intInRange(220, 255), 0, 0);
+		break;
+	case Water:
+		_color = sf::Color(0, 0, Random::intInRange(240, 255));
 		break;
 	default:
 		break;

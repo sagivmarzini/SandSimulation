@@ -7,8 +7,9 @@ class Grain
 public:
 	enum class Type
 	{
-		AIR,
-		SAND
+		Air,
+		Sand,
+		Water
 	};
 
 	Grain();
