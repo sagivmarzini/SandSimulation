@@ -62,19 +62,20 @@ void Renderer::drawSand()
 
 	for (int row = 0; row < cells.size(); ++row) {
 		for (int col = 0; col < cells[row].size(); ++col) {
-			if (cells[row][col].getType() == Grain::Type::AIR)
+			const auto& cell = cells[row][col];
+			if (cell.getType() == Grain::Type::AIR)
 				continue; // skip empty cells
 
 			float x = col * _sideLength;
 			float y = row * _sideLength;
 
-			vertices.append(sf::Vertex{ { x, y }, sf::Color::Red });
-			vertices.append(sf::Vertex{ { x + _sideLength, y }, sf::Color::Red });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x, y }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell.getColor() });
 
-			vertices.append(sf::Vertex{ { x, y }, sf::Color::Red });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, sf::Color::Red });
-			vertices.append(sf::Vertex{ { x, y + _sideLength }, sf::Color::Red });
+			vertices.append(sf::Vertex{ { x, y }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x, y + _sideLength }, cell.getColor() });
 		}
 	}
 

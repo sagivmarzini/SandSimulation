@@ -16,6 +16,11 @@ public:
 	void setType(const Type& type);
 	Type getType() const;
 
+	sf::Color getColor() const;
+
 private:
+	void assignColor();
+
 	Type _type;
+	sf::Color _color;
 };
