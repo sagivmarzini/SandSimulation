@@ -32,7 +32,10 @@ void Grain::assignColor()
 		_color = sf::Color::Transparent;
 		break;
 	case Sand:
-		_color = sf::Color(Random::intInRange(220, 255), 0, 0);
+		_color = sf::Color(Random::intInRange(220, 240), Random::intInRange(175, 190), Random::intInRange(115, 130), 255);
+		break;
+	case Mud:
+		_color = sf::Color(Random::intInRange(120, 130), Random::intInRange(100, 150), Random::intInRange(70, 85), 255);
 		break;
 	case Water:
 		_color = sf::Color(0, 0, Random::intInRange(240, 255));

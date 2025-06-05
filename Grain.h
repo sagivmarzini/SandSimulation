@@ -9,6 +9,7 @@ public:
 	{
 		Air,
 		Sand,
+		Mud,
 		Water
 	};
 

@@ -15,10 +15,12 @@ public:
 
 private:
 	bool isAir(const int row, const int col) const;
+	bool isWater(const int row, const int col) const;
 	bool isAirOrWater(const int row, const int col) const;
 
 	void updateSand(const int row, const int col);
 	void updateWater(const int row, const int col);
+	void updateMud(const int row, const int col);
 
 	std::vector<std::vector<Grain>> _cells;
 };

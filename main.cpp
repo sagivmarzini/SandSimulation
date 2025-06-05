@@ -3,11 +3,11 @@
 #include "Renderer.h"
 
 constexpr double FRAME_RATE = 60.0f;
-constexpr sf::Time deltaTime = sf::seconds(1.f / FRAME_RATE);;
+constexpr sf::Time deltaTime = sf::seconds(1.f / FRAME_RATE);
 
 int main()
 {
-	Grid grid(180, 80);
+	Grid grid(360, 160);
 	Renderer renderer(sf::VideoMode({ 1800, 800 }), "Sandy Boi", FRAME_RATE, grid);
 
 	sf::Clock clock;

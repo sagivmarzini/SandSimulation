@@ -5,6 +5,8 @@
 Grid::Grid(const int cols, const int rows)
 	: _cells(rows, std::vector<Grain>(cols, Grain()))
 {
+	//init random
+	Random::seed(123);
 }
 
 void Grid::update()
@@ -20,6 +22,9 @@ void Grid::update()
 			{
 			case Sand:
 				updateSand(row, col);
+				break;
+			case Mud:
+				updateMud(row, col);
 				break;
 			case Water:
 				updateWater(row, col);
@@ -55,6 +60,14 @@ bool Grid::isAir(const int row, const int col) const
 	return _cells[row][col].getType() == Grain::Type::Air;
 }
 
+bool Grid::isWater(const int row, const int col) const
+{
+	if (row < 0 || col < 0 ||
+		row >= _cells.size() || col >= _cells[0].size())
+		return false;
+	return _cells[row][col].getType() == Grain::Type::Water;
+}
+
 bool Grid::isAirOrWater(const int row, const int col) const
 {
 	if (row < 0 || col < 0 ||
@@ -71,6 +84,19 @@ void Grid::updateSand(const int row, const int col)
 	auto& currentRow = _cells[row];
 	auto& nextRow = _cells[row + 1];
 
+
+	//check for srounding water to change into mud
+	const bool upOrDownIsWater = isWater(row + 1, col) || isWater(row - 1, col);
+	const bool topDiagonalsAreWater = isWater(row - 1, col + 1) || isWater(row - 1, col - 1);
+	const bool sidesAreWater = isWater(row, col + 1) || isWater(row, col - 1);
+
+	if (upOrDownIsWater || topDiagonalsAreWater || sidesAreWater)
+	{
+		//if water is touching the sand, turn into mud
+		_cells[row][col].setType(Grain::Type::Mud);
+	}
+
+	//apply gravity
 	if (isAirOrWater(row + 1, col))
 	{
 		std::swap(current, nextRow[col]);
@@ -122,14 +148,14 @@ void Grid::updateWater(const int row, const int col)
 		std::swap(current, _cells[row + 1][col + direction]);
 		return;
 	}
-	else if (canFallLeft)
-	{
-		std::swap(current, _cells[row + 1][col - 1]);
-		return;
-	}
 	else if (canFallRight)
 	{
 		std::swap(current, _cells[row + 1][col + 1]);
+		return;
+	}
+	else if (canFallLeft)
+	{
+		std::swap(current, _cells[row + 1][col - 1]);
 		return;
 	}
 
@@ -152,4 +178,26 @@ void Grid::updateWater(const int row, const int col)
 		std::swap(current, _cells[row][col + 1]);
 	}
 	// If no movement possible, water stays put
+}
+
+void Grid::updateMud(const int row, const int col)
+{
+	auto& current = _cells[row][col];
+
+
+	//check if needs to move (1/5)
+	const bool shouldUpdate = Random::intInRange(1, 5) == 5;
+	if (shouldUpdate == false)
+	{
+		return;
+	}
+
+	//pick a random direction
+	const int direction = Random::randomItem(std::array{ -1, 0, 1 });
+
+	const bool canSink = isAirOrWater(row + 1, col + direction);
+	if (canSink)
+	{
+		std::swap(current, _cells[row + 1][col + direction]);
+	}
 }
