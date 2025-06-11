@@ -18,6 +18,26 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="files\Constants.h" />
+    <ClInclude Include="files\Grain.h" />
+    <ClInclude Include="files\Grid.h" />
+    <ClInclude Include="files\Random.h" />
+    <ClInclude Include="files\Renderer.h" />
+    <ClInclude Include="files\Types\Mud.h" />
+    <ClInclude Include="files\Types\Sand.h" />
+    <ClInclude Include="files\Types\Water.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="files\Grain.cpp" />
+    <ClCompile Include="files\Grid.cpp" />
+    <ClCompile Include="files\main.cpp" />
+    <ClCompile Include="files\Random.cpp" />
+    <ClCompile Include="files\Renderer.cpp" />
+    <ClCompile Include="files\Types\Mud.cpp" />
+    <ClCompile Include="files\Types\Sand.cpp" />
+    <ClCompile Include="files\Types\Water.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -148,20 +168,6 @@
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Grain.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="Grain.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="Renderer.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

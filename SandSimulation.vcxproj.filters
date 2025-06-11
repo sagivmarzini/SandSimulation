@@ -13,39 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Types headers">
+      <UniqueIdentifier>{d9b86da0-cb10-42f6-b6fc-9adf1fde51e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Types cpp">
+      <UniqueIdentifier>{a64a7ac1-028a-4c85-95d4-b3b88904a7a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Grain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Grid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="files\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Grain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Types\Sand.h">
+      <Filter>Header Files\Types headers</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Types\Water.h">
+      <Filter>Header Files\Types headers</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Types\Mud.h">
+      <Filter>Header Files\Types headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Grain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="files\Grain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Types\Sand.cpp">
+      <Filter>Source Files\Types cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Types\Water.cpp">
+      <Filter>Source Files\Types cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Types\Mud.cpp">
+      <Filter>Source Files\Types cpp</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

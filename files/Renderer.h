@@ -6,7 +6,7 @@
 class Renderer
 {
 public:
-	Renderer(const sf::VideoMode& videoMode, const std::string& windowName, const int maxFrameRate, Grid& grid);
+	Renderer(const sf::VideoMode& videoMode, const std::string& windowName, const int maxFrameRate);
 
 	void draw();
 
@@ -14,13 +14,12 @@ public:
 
 	bool isOpen() const;
 private:
-	void drawSand();
+	void drawGrid();
 	void drawBrush();
 
 	void useBrush(const int col, const int row, const Grain::Type grainType);
 
 	sf::RenderWindow _window;
-	Grid& _grid;
 	float _sideLength;
 	int _brushSize;
 };

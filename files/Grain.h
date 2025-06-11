@@ -14,11 +14,14 @@ public:
 	};
 
 	Grain();
+	Grain(const Type& type);
 
 	void setType(const Type& type);
 	Type getType() const;
 
 	sf::Color getColor() const;
+
+	virtual void update(const int row, const int col) = 0;
 
 private:
 	void assignColor();

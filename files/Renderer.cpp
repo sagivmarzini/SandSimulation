@@ -1,9 +1,8 @@
 #include "Renderer.h"
 
-Renderer::Renderer(const sf::VideoMode& videoMode, const std::string& windowName, const int maxFrameRate, Grid& grid)
+Renderer::Renderer(const sf::VideoMode& videoMode, const std::string& windowName, const int maxFrameRate)
 	: _window(videoMode, windowName),
-	_grid(grid),
-	_sideLength((float)std::min(_window.getSize().y / grid.getCells().size(), _window.getSize().x / grid.getCells()[0].size())),
+	_sideLength((float)std::min(_window.getSize().y / Grid::instance->getCells().size(), _window.getSize().x / Grid::instance->getCells()[0].size())),
 	_brushSize(_window.getSize().x / 100 / _sideLength)
 {
 	//_window.setFramerateLimit(maxFrameRate);
@@ -13,7 +12,7 @@ void Renderer::draw()
 {
 	_window.clear(sf::Color::Black);
 
-	drawSand();
+	drawGrid();
 	drawBrush();
 
 	_window.display();
@@ -64,27 +63,29 @@ bool Renderer::isOpen() const
 	return _window.isOpen();
 }
 
-void Renderer::drawSand()
+void Renderer::drawGrid()
 {
 	sf::VertexArray vertices(sf::PrimitiveType::Triangles);
-	const auto& cells = _grid.getCells();
+	const auto& cells = Grid::instance->getCells();
 
 	for (int row = 0; row < cells.size(); ++row) {
 		for (int col = 0; col < cells[row].size(); ++col) {
 			const auto& cell = cells[row][col];
-			if (cell.getType() == Grain::Type::Air)
-				continue; // skip empty cells
 
+			// skip empty cells
+			if (cell == nullptr) continue; 
+
+			//get length
 			float x = col * _sideLength;
 			float y = row * _sideLength;
 
-			vertices.append(sf::Vertex{ { x, y }, cell.getColor() });
-			vertices.append(sf::Vertex{ { x + _sideLength, y }, cell.getColor() });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x, y }, cell->getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y }, cell->getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell->getColor() });
 
-			vertices.append(sf::Vertex{ { x, y }, cell.getColor() });
-			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell.getColor() });
-			vertices.append(sf::Vertex{ { x, y + _sideLength }, cell.getColor() });
+			vertices.append(sf::Vertex{ { x, y }, cell->getColor() });
+			vertices.append(sf::Vertex{ { x + _sideLength, y + _sideLength }, cell->getColor() });
+			vertices.append(sf::Vertex{ { x, y + _sideLength }, cell->getColor() });
 		}
 	}
 
@@ -116,7 +117,7 @@ void Renderer::useBrush(const int col, const int row, const Grain::Type grainTyp
 			// Make it circular instead of square
 			if (x * x + y * y <= radius * radius)
 			{
-				_grid.setCell(grainType, col + x, row + y);
+				Grid::instance->setCell(grainType, col + x, row + y);
 			}
 		}
 	}

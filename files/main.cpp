@@ -7,8 +7,8 @@ constexpr sf::Time deltaTime = sf::seconds(1.f / FRAME_RATE);
 
 int main()
 {
-	Grid grid(360, 160);
-	Renderer renderer(sf::VideoMode({ 1800, 800 }), "Sandy Boi", FRAME_RATE, grid);
+	Grid(360, 160);
+	Renderer renderer(sf::VideoMode({ 1800, 800 }), "Sandy Boi", FRAME_RATE);
 
 	sf::Clock clock;
 	sf::Time accumulator = sf::Time::Zero;
@@ -22,7 +22,7 @@ int main()
 
 		while (accumulator >= deltaTime)
 		{
-			grid.update();
+			Grid::instance->update();
 
 			accumulator -= deltaTime;
 		}

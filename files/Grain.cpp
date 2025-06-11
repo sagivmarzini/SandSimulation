@@ -2,8 +2,13 @@
 #include "Random.h"
 
 Grain::Grain()
-	: _type(Type::Air)
 {
+	setType(Type::Air);
+}
+
+Grain::Grain(const Type& type) 
+{
+	setType(type);
 }
 
 void Grain::setType(const Type& type)
@@ -21,6 +26,7 @@ sf::Color Grain::getColor() const
 {
 	return _color;
 }
+
 
 void Grain::assignColor()
 {
